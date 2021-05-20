@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ustacky Frontend Project</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+    
+        <!--Summary-->
+
+        <section id="summarySection">
+            <div class="showSummary-container">
+                
+                <h2>Thank you, <span id="customerName"></span>, Your Order Has been Received</h2>
+                <br>
+                
+                <div > 
+                    <img src="./Images/check.svg" id="checkImage" alt="check-image">
+                </div>
+                <br>                
+                
+                <div>
+                    <p id="summarySectionText">Summary</p>
+                </div>
+        
+                <table id="showCartTable">
+    
+                    <tr>
+                        <th>S/N</th>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                    </tr>
+    
+                </table>
+                <br>
+                <div class="btnShowCart-container">
+                    <button id="btnShowCart">OK</button>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!--shopping cart-->
+
+        <section id="shopping-cart">
+            <div class="productName-container">
+                    <div id="cart-items-section">
+                        
+                        <table id="table">
+                            <tr>
+                                <th id="serial-number">S/N</th>
+                                <th id="cart-item">Item</th>
+                                <th id="cart-prices">Price</th>
+                                <th id="quantity">Quantity</th>
+                                <th id="delete"> </th>
+                            </tr>
+                       
+                        </table>
+                    </div>
+                        
+                    <br><br>
+        
+                    <form action="" id="user-details">
+                        <input type="text" id="nameInput" placeholder="Your Name" onblur="nameValidation()">
+                        <p class="errors" id="nameError"></p>   
+                        
+                        <br>
+                        
+                        <input type="email" id="emailInput" placeholder="Your Email" onblur="emailValidation()">
+                        <p class="errors" id="emailError"></p>
+                        
+                        <br>
+                        
+                        <input type="tel" id="numberInput" placeholder="Your Phone Number" onblur="numberValidation()">
+                        <p class="errors" id="numberError"></p>
+        
+                    </form>
+        
+                    <div id="amount">
+                        <p id="textSummary">Total Amount to be Paid</p>
+                        <p id="priceSummary">₦0</p>
+                    </div>
+        
+                    <div id="actions">
+                        <div class="flex-actions">
+                        <button id="continue" onclick="continueShopping()">Continue Shopping</button>
+                        <button id="checkout" onclick="payWithPaystack()">Checkout</button>
+                    </div>
+
+                </div>
+            </div>
+        
+        </section>
+
+
+        <nav id="nav">
+            <div class="container">
+                <div class="flex">
+                    <div class="nav-image-holder">
+                        <img id="nav-image" src="./Images/EMS.svg"
+                        height="auto" width="auto" alt="nav-image">
+                    </div>
+    
+                    <ul class="nav-list-holder">
+                        <li class="nav-list"><a href="#intro">Intro</a></li>
+                        <li class="nav-list"><a href="#about">About</a></li>
+                        <li class="nav-list"><a href="#shop">Shop</a></li>
+                    </ul>
+    
+                    <div class="nav-image-cart-holder">
+                        <img id="navCartImage" onclick="showCart()"  src="./Images/cart.svg" alt="nav-image2">
+                        <p id="cart-item-no">0</p>
+                    </div>
+    
+                </div>
+            </div>
+        </nav>
+
+
+
+    
+        <!--Intro-->
+        
+        <section id="intro">
+            <div class="container">
+                <div class="flex">
+                    <div class="head1-holder">
+                        <h1 class="head1">THE E-MILLENIAL STORE</h1>
+                    </div>
+    
+                    <div class="hero-image-holder">
+                        <img id="hero-image" src="./Images/heroImage.png" 
+                        width="500" height="500" alt="hero-image">
+                    </div>
+                </div>
+                <div class="intro-btn-holder">
+                    <button  id="intro-btn"><a href="#shop">SHOP NOW</a></button >
+                </div>
+            </div>
+        </section>
+
+
+    <!--About-->
+
+    <section id="about">
+        <div class="container">
+            <div class="flex">
+                <div>
+                    <p>E-Millenial is an hypothetical online store for gadgets
+                        we believe every 'Millenial' or 'Gen-Z' should have today.
+                        We've got mobile phones, laptops, smartwatches and other
+                        gadgets. Explore all our gadgets and choose the ones that 
+                        suit you.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--Shop-->
+
+    <section id="shop">
+        <div class="container">
+            <h2 class="head2"> OUR GADGETS </h2>
+            <div class="grid">
+
+                <div class="gadget product1">
+                    <div class="productprice-holder" id="price1-holder">
+                        <p class="price">Price</p>
+                        <p class="productPrice" id="price1"> ₦500000 </p>
+                    </div>
+                    <h3 class="productName" id="product1Name">SAMSUNG TV</h3>
+                    <button class="btn-cart">ADD TO CART</button>
+                </div>
+
+                <div class="gadget product2">
+                    <div class="productprice-holder" id="price2-holder">
+                        <p class="price">Price</p>
+                        <p class="productPrice" id="price2"> ₦350000 </p>
+                    </div>
+                    <h3 class="productName" id="product2Name">PIXEL 4a</h3>
+                    <button class="btn-cart">ADD TO CART</button>
+                </div>
+                
+                <div class="gadget product3">
+                    <div class="productprice-holder" id="price3-holder">
+                        <p class="price">Price</p>
+                        <p class="productPrice" id="price3"> ₦300000 </p>
+                    </div>
+                    <h3 class="productName" id="product3Name">PS 5</h3>
+                    <button class="btn-cart">ADD TO CART</button>
+                </div>
+                
+                <div class="gadget product4">
+                    <div class="productprice-holder" id="price4-holder">
+                        <p class="price">Price</p>
+                        <p class="productPrice" id="price4"> ₦800000 </p>
+                    </div>
+                    <h3 class="productName" id="product4Name">MACBOOK AIR</h3>
+                    <button class="btn-cart">ADD TO CART</button>
+                </div>
+                
+                <div class="gadget product5">
+                    <div class="productprice-holder" id="price5-holder">
+                        <p class="price">Price</p>
+                        <p class="productPrice" id="price5"> ₦95000 </p>
+                    </div>
+                    <h3 class="productName" id="product5Name">APPLE WATCH</h3>
+                    <button class="btn-cart">ADD TO CART</button>
+                </div>
+                
+                <div class="gadget product6">
+                    <div class="productprice-holder" id="price6-holder">
+                        <p class="price">Price</p>
+                        <p class="productPrice" id="price6"> ₦150000 </p>
+                    </div>
+                    <h3 class="productName" id="product6Name">AIR PODS</h3>
+                    <button class="btn-cart">ADD TO CART</button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <br><br><br>
+
+    <!--footer-->
+
+    <footer id="footer">
+        <div class="container">
+            <div class="grid-footer">
+                <div class="image-footer-holder">
+                    <img id="image-footer" src="./Images/EMS.svg" alt="image-footer">
+                </div>
+
+                <div class="text-footer-holder">
+                    <p>Designed and Crafted by a Frontend Ninja</p>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+   
+
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <script src="./script.js"></script>
+</body>
+</html>
+
