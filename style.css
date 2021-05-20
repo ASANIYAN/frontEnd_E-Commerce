@@ -435,7 +435,7 @@ table{
     }
 
     #shopping-cart{
-        width: 350px;
+        width: 100vw;
     }
 
     #user-details input{
@@ -445,7 +445,7 @@ table{
     /* showCart styling*/
 
     #summarySection{
-    width: 80vw;
+    width: 100vw;
     }
 
 }
