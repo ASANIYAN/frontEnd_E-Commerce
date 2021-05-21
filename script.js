@@ -1,4 +1,4 @@
-const productItems = {1: "SAMSUNG TV", 2: "PIXEL 4a", 3: "PS 5", 5: "MACBOOK AIR", 5: "APPLE WATCH", 6: "AIR PODS"};
+const productItems = {1: "SAMSUNG TV", 2: "PIXEL 4a", 3: "PS 5", 4: "MACBOOK AIR", 5: "APPLE WATCH", 6: "AIR PODS"};
 var btnCart = document.querySelectorAll('.btn-cart');
 const table = document.getElementById('table');
 var cartItemNo = document.getElementById('cart-item-no');
