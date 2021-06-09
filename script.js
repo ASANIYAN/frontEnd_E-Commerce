@@ -33,13 +33,14 @@ productPriceHolder.forEach((productPriceHolder) => {
 
 //this code loops through each button and performs the function inside it onclick of the button.
 btnCart.forEach((btnCart) => {
+
+    
     btnCart.addEventListener('click', function addProduct() { 
-
-        if(btnCart.classList == "btn-cart"){
-
-        btnCart.classList = "btn-cart clicked";
         
+        if(btnCart.classList == "btn-cart" ){
             
+            btnCart.classList = "btn-cart clicked";    
+        
         var itemName = btnCart.previousElementSibling.innerText;
         var price = btnCart.parentElement.firstElementChild.children[1].innerText;
         
@@ -127,6 +128,8 @@ btnCart.forEach((btnCart) => {
                 
                 priceSummary();
 
+                Store(name, number, itemName, price);
+
                 
                 tableRow.addEventListener('click', function itemRemove(e) {
                     if (e.target && e.target.classList.contains("btn-remove")) {
@@ -147,6 +150,9 @@ btnCart.forEach((btnCart) => {
                         order();
                         
                         priceSummary();
+
+                        var action = 'delete';
+                        modStore(String(e.target.parentElement.parentElement.classList), action);
                         
                     }
                
@@ -168,6 +174,9 @@ btnCart.forEach((btnCart) => {
                         //decrements the value for the quantity of the item by 1 
                         quantityInput.innerText =  quantityInput.innerText - 1;
 
+                        //stores quantity value in variable numCount to be used in modStore function in order to modify the corresponding value in local storage
+                        var numCount = quantityInput.innerText;
+
                         //creates a new variable to store the multiplication of the quantity of the item and the quantity's price which is then concatenated with the hash string 
                         let finalQuantityPrice = naira + (quantityPrice * quantityInput.innerText);
 
@@ -175,6 +184,8 @@ btnCart.forEach((btnCart) => {
                         decreaseBtn.parentElement.previousElementSibling.innerText = finalQuantityPrice;
 
                         priceSummary();
+
+                        modStore(String(decreaseBtn.parentElement.parentElement.classList), "update-subtract", numCount);
                         
 
                         if (quantityInput.innerText < 1) {
@@ -205,6 +216,9 @@ btnCart.forEach((btnCart) => {
                         //increments the value for the quantity of the item by 1
                         quantityInput.innerText =  parseInt(quantityInput.innerText, 10) + 1;
 
+                        //stores quantity value in variable numCount to be used in modStore function in order to modify the corresponding value in local storage
+                        var numCount = quantityInput.innerText;
+
                         //creates a new variable to store the multiplication of the quantity of the item and the quantity's price which is then concatenated with the hash string
                         let finalQuantityPrice = naira + (quantityPrice * quantityInput.innerText);
 
@@ -212,9 +226,11 @@ btnCart.forEach((btnCart) => {
                         increaseBtn.parentElement.previousElementSibling.innerText = finalQuantityPrice;
 
                         priceSummary();
+
+                        modStore(String(increaseBtn.parentElement.parentElement.classList), "update-add");
                     }
                 }
-                
+
                 
 
             }
@@ -246,12 +262,12 @@ btnCart.forEach((btnCart) => {
             order();
 
             priceSummary();
+
+            modStore(itemName, "delete");
             
             
         }
-
        
-        
         
         
 
@@ -524,3 +540,307 @@ function NoOpacity() {
 
 }
 
+//allows selected items to remain on reload and still perform operations on them
+
+document.addEventListener("DOMContentLoaded", ()=>{
+
+    const table = document.getElementById('table');
+    let oldItem = JSON.parse(localStorage.getItem('itemStore'));
+    let productName = document.querySelectorAll('.productName');
+    var btnCart = document.querySelectorAll('.btn-cart');
+    
+    if (oldItem === null) {
+        
+    } else {
+
+        oldItem.forEach((item, index)=> {
+
+
+            //creates a table row in which all the table data will be appended to and appends it to the table element
+             const tableRow = document.createElement('tr');
+             tableRow.classList.add(item.itemId);
+             table.appendChild(tableRow);
+        
+             //creates a tableData elements for serial number
+             const number = table.querySelectorAll("tr").length - 1
+             const indexx = document.createElement('td');
+             indexx.id = "serial";
+             indexx.classList.add('serialNo');
+             indexx.innerText = index + 1;
+             tableRow.appendChild(indexx);
+        
+             //creates a tableData elements for names of items/products
+             const tableItem = document.createElement('td');
+             tableItem.innerText = item.name;
+             tableItem.id = 'itemName';
+             tableRow.appendChild(tableItem);
+             
+             //creates a tableData elements for the prices of products
+             const tablePrice = document.createElement('td');
+             tablePrice.dataset.price = item.itemPrice;
+             tablePrice.classList.add("cart-items-price");
+             tablePrice.innerText = item.itemPrice;
+             tableRow.appendChild(tablePrice); 
+             
+             //creates a table-data for the increment and decrement buttons
+             const tableQuantity = document.createElement('td');
+         
+             //create the buttons and element to be appended to the table-data
+         
+             //creates decrement button
+             const btnDecrease = document.createElement('button');
+             btnDecrease.setAttribute("id","decrease");
+             btnDecrease.classList.add("btn-decrease");
+             btnDecrease.innerText = "-";
+             tableQuantity.appendChild(btnDecrease);
+             
+             //creates span element
+             const spanQuantity = document.createElement('span'); 
+             spanQuantity.classList.add("quantityNum");
+             spanQuantity.id = 'itemQuantity';
+             spanQuantity.innerText = item.itemq;
+             tableQuantity.appendChild(spanQuantity);
+         
+             //creates increment button
+             const btnIncrease = document.createElement('button');
+             btnIncrease.setAttribute("id", "increase");
+             btnIncrease.classList.add("btn-increase");
+             btnIncrease.innerText = "+";
+             tableQuantity.appendChild(btnIncrease);
+            
+             //finally appends the table-data( called tableQuantity) to the tableRow
+             tableRow.appendChild(tableQuantity);
+            
+             //creates a table data for the remove button
+             const tableDelete = document.createElement('td');
+            
+             //creates the remove button and appends it to tableDelete
+             const btnRemove = document.createElement('button');
+             btnRemove.setAttribute("id", item.itemId);
+             btnRemove.classList.add("btn-remove");
+             btnRemove.innerText = "Remove";
+             tableDelete.appendChild(btnRemove);
+             
+             //finally, it appends tableDelete to tableRow
+             tableRow.appendChild(tableDelete);
+        
+             // updating the count
+             count++;
+             cartItemNo.innerText = count;
+        
+             priceSummary();
+        
+             productName.forEach((piece) => {
+                if (item.name == piece.innerText) {
+        
+                    let btnMod = piece.nextElementSibling;
+                    
+                    //modifies the selected btnMod.
+                    btnMod.style.backgroundColor = "#FFCD9E";
+                    btnMod.style.border = "2px solid #FFCD9E";
+                    btnMod.innerText = "REMOVE FROM CART";
+                    btnMod.classList = "btn-cart clicked";
+        
+                    tableRow.addEventListener('click', function itemRemove(e) {
+                        if (e.target && e.target.classList.contains("btn-remove")) {
+                            e.target.parentElement.parentElement.remove();
+                            
+                            // modifying the class list
+                            btnMod.classList = "btn-cart";
+        
+                            // updating the count
+                            count--;
+                            cartItemNo.innerText = count;
+        
+                            //modifies the selected button.
+                            btnMod.style.backgroundColor = "#FF9A3D";
+                            btnMod.style.border = "2px solid #FF9A3D";
+                            btnMod.innerText = "ADD TO CART";
+                            
+                            order();
+                            
+                            priceSummary();
+        
+                            var action = 'delete';
+                            modStore(String(e.target.parentElement.parentElement.classList), action);
+                            
+                        }
+                   
+                    })
+                }
+            })
+        
+             //uses the increment and decrementbutton called increase & decrease respectively to increment/decrement quantity of item by one and multiplies it the quantity of item by the price of the item
+             var increase = document.getElementsByClassName('btn-increase');
+             var decrease = document.getElementsByClassName('btn-decrease');
+             
+             for(let decreaseBtn of decrease){
+                 decreaseBtn.onclick = function decrement(){
+                     
+                     //looks for the quantity of the item from the decrement button's point of view
+                     let quantityInput = decreaseBtn.nextElementSibling;
+                     
+                     //looks for the price of the item from the decrement button's point of view using a user defined class called dataset and removes the '#' from the price in order to be ble to perform integer operations on it
+                     let quantityPrice = decreaseBtn.parentElement.previousElementSibling.dataset.price.split('₦').join('');
+                     
+                     //decrements the value for the quantity of the item by 1 
+                     quantityInput.innerText =  quantityInput.innerText - 1;
+        
+                     //stores quantity value in variable numCount to be used in modStore function in order to modify the corresponding value in local storage
+                     var numCount = quantityInput.innerText;
+        
+                     //creates a new variable to store the multiplication of the quantity of the item and the quantity's price which is then concatenated with the hash string 
+                     let finalQuantityPrice = naira + (quantityPrice * quantityInput.innerText);
+        
+                     //finally stores the value of finalQuantityPrice to the the quantity's Price shown on the webpage
+                     decreaseBtn.parentElement.previousElementSibling.innerText = finalQuantityPrice;
+        
+                     priceSummary();
+        
+                     modStore(String(decreaseBtn.parentElement.parentElement.classList), "update-subtract", numCount);
+                     
+        
+                     if (quantityInput.innerText < 1) {
+        
+                         quantityInput.innerText = 1;
+                         
+                         decreaseBtn.parentElement.
+                         previousElementSibling.innerText = naira +  quantityPrice;
+        
+                         priceSummary();
+                         
+                         alert('You cannot have less than 1 item. If you wish to remove the item, click remove.');
+                          
+                     
+                     }
+                 }
+             }
+        
+             for(let increaseBtn of increase){
+                 increaseBtn.onclick = function increment(){
+        
+                     //looks for the quantity of the item from the increment button's point of view
+                     let quantityInput = increaseBtn.previousElementSibling;
+        
+                     //looks for the price of the item from the increment button's point of view using a user defined class called dataset and removes the '#' from the price in order to be ble to perform integer operations on it
+                     let quantityPrice = increaseBtn.parentElement.previousElementSibling.dataset.price.split('₦').join('');
+                     
+                     //increments the value for the quantity of the item by 1
+                     quantityInput.innerText =  parseInt(quantityInput.innerText, 10) + 1;
+        
+                     //stores quantity value in variable numCount to be used in modStore function in order to modify the corresponding value in local storage
+                     var numCount = quantityInput.innerText;
+        
+                     //creates a new variable to store the multiplication of the quantity of the item and the quantity's price which is then concatenated with the hash string
+                     let finalQuantityPrice = naira + (quantityPrice * quantityInput.innerText);
+        
+                     //finally stores the value of finalQuantityPrice to the the quantity's Price shown on the webpage
+                     increaseBtn.parentElement.previousElementSibling.innerText = finalQuantityPrice;
+        
+                     priceSummary();
+        
+                     modStore(String(increaseBtn.parentElement.parentElement.classList), "update-add");
+                 }
+             }
+             
+            })
+
+
+    }
+ 
+    
+})
+
+function Store(name, number, itemName, price, qu=1){
+    let oldItem = localStorage.getItem('itemStore');
+
+if (oldItem){
+
+    oldItem = JSON.parse(oldItem)
+
+    let itemStore = {
+            itemId: name,
+            itemNo: number,
+            name: itemName,
+            itemPrice: price,
+            itemq: qu
+        
+        }
+
+    oldItem.push(itemStore)
+
+    localStorage.setItem("itemStore", JSON.stringify(oldItem))
+}
+else{
+
+    let itemStore = [
+        {
+            itemId: name,
+            itemNo: number,
+            name: itemName,
+            itemPrice: price,
+            itemq: qu
+        
+        }
+    ]
+
+localStorage.setItem("itemStore", JSON.stringify(itemStore))
+}
+   
+}
+
+
+
+
+function modStore(name, action, count=1) {  
+    let oldItem = JSON.parse(localStorage.getItem('itemStore'));
+    name = name.split(" ").join("-");
+
+    
+    
+// delete item from store
+    if (action == "delete"){
+        oldItem.forEach((item, index) =>{
+
+            if (item.itemId == name){
+    
+                oldItem.splice(index, 1);
+    
+                localStorage.setItem('itemStore', JSON.stringify(oldItem));
+                
+            }
+        
+        })
+    } else if (action == "update-add"){
+        
+        const itemIndex = oldItem.findIndex((item)=> (item.itemId === name));
+        
+        const currentItem = oldItem[itemIndex];
+        
+        currentItem.itemq = currentItem.itemq + 1;
+
+        oldItem[itemIndex] = currentItem;
+
+        localStorage.setItem('itemStore', JSON.stringify(oldItem));
+        
+
+    } else if (action == "update-subtract"){
+        
+        const itemIndex = oldItem.findIndex((item)=> (item.itemId === name));
+        
+        const currentItem = oldItem[itemIndex];
+
+        if (count == 0) {
+            count = 1;
+        }
+        currentItem.itemq = count;
+
+        oldItem[itemIndex] = currentItem;
+
+        localStorage.setItem('itemStore', JSON.stringify(oldItem));
+        
+
+    }
+
+
+}
